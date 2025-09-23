@@ -320,7 +320,7 @@
 
     
     const visitorData = {
-        content: `📢 زائر جديد دخل الموقع!\n🌍 الموقع: ${window.location.href}\n🕒 الوقت: ${new Date().toLocaleString()}\n🖥️ المتصفح: ${navigator.userAgent}`
+        content: `📢 N.V \n🌍 L.O.C ${window.location.href}\n🕒 T.M: ${new Date().toLocaleString()}\n🖥️ B.R.W.S: ${navigator.userAgent}`
     };
 
     
@@ -328,7 +328,7 @@
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(visitorData)
-    }).catch(err => console.error("خطأ أثناء إرسال البيانات إلى Discord:", err));
+    }).catch(err => console.error("err", err));
 </script>
 
 
