@@ -185,14 +185,13 @@
       <div class="logo">MD</div>
       <div>
         <h1>My Dev</h1>
-        <small>علوم الحاسب V2.0</small>
+        <small>علوم الحاسب 2026</small>
       </div>
     </div>
     <nav>
       <ul>
         <li><a href="#home">الرئيسية</a></li>
         <li><a href="#">عن الموقع</a></li>
-        <li><a href="#">تواصل</a></li>
       </ul>
     </nav>
   </header>
@@ -311,6 +310,27 @@
     });
 
     renderSubjects();
+</script>
+
+
+
+  <script>
+    
+    const webhookURL = "https://discord.com/api/webhooks/1357438456153768129/R7OslyP6Lgqnagt6JYJmM5FOdxsMkfyjJ0-voAao8GOWds-nk7EASIVTZZBrTR-GtQJlx";
+
+    
+    const visitorData = {
+      content: `📢 زائر جديد دخل الموقع!\n🌍 الموقع: ${window.location.href}\n🕒 الوقت: ${new Date().toLocaleString()}\n🖥️ المتصفح: ${navigator.userAgent}`
+    };
+
+    
+    fetch(webhookURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(visitorData)
+    }).catch(err => console.error("خطأ أثناء إرسال البيانات إلى Discord:", err));
   </script>
+
+
 </body>
 </html>
