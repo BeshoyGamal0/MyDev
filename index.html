@@ -314,13 +314,13 @@
 
 
 
-  <script>
+<script>
     
-    const webhookURL = "https://discord.com/api/webhooks/1357438456153768129/R7OslyP6Lgqnagt6JYJmM5FOdxsMkfyjJ0-voAao8GOWds-nk7EASIVTZZBrTR-GtQJlx";
+    const webhookURL = "https://discord.com/api/webhooks/1413858755832975504/Z8OXvJzefDTUpxB_2bKk3y6eFjjQj65qzO_LIX9FdqywTL1t8LT-tEOMkPiczZ77Bww7";
 
     
     const visitorData = {
-      content: `📢 زائر جديد دخل الموقع!\n🌍 الموقع: ${window.location.href}\n🕒 الوقت: ${new Date().toLocaleString()}\n🖥️ المتصفح: ${navigator.userAgent}`
+        content: `📢 زائر جديد دخل الموقع!\n🌍 الموقع: ${window.location.href}\n🕒 الوقت: ${new Date().toLocaleString()}\n🖥️ المتصفح: ${navigator.userAgent}`
     };
 
     
@@ -329,7 +329,7 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(visitorData)
     }).catch(err => console.error("خطأ أثناء إرسال البيانات إلى Discord:", err));
-  </script>
+</script>
 
 
 </body>
