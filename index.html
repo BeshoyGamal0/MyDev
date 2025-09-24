@@ -214,6 +214,27 @@
     animation: shine 3s infinite linear;
   }
 
+  .exam-link {
+    display: block;              /* يخليه تحت النص مباشرة */
+    margin: 25px auto 0;         /* مسافة من فوق + يتوسّط بالعرض */
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff !important;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border-radius: 10px;
+    text-align: center;
+    width: fit-content;          /* يخليه بحجم النص فقط */
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .exam-link:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    text-decoration: none;
+  }
+
+
 
 
 
@@ -232,16 +253,17 @@
       <ul>
         <li><a href="#home">الرئيسية</a></li>
         <li><a href="#">عن الموقع</a></li>
-        <li><a href="exam.html" class="exam-link">🧮 Exam on Math</a></li>
+        
       </ul>
     </nav>
   </header>
 
   <main>
     <section id="home" class="hero">
-      <h2>اهلا بك في <span class="brandX">My Dev</span></h2>
+      <h2>مرحبا بكم في <span class="brandX">My Dev</span></h2>
       <p class="signature">By Beshoy Gamal</p>
       <p>كل شئ في مكان واحد</p>
+      <a href="exam.html" class="exam-link">🧮 Exam on Math</a>
       <div class="grid" id="subjectsGrid"></div>
     </section>
 
@@ -356,7 +378,7 @@
 
 
 
-<script>
+<!-- <script>
     
     const webhookURL = "https://discord.com/api/webhooks/1413858755832975504/Z8OXvJzefDTUpxB_2bKk3y6eFjjQj65qzO_LIX9FdqywTL1t8LT-tEOMkPiczZ77Bww7";
 
@@ -371,7 +393,7 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(visitorData)
     }).catch(err => console.error("err", err));
-</script>
+</script>-->
 
 
 </body>
