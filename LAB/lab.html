@@ -366,7 +366,7 @@
       width: 100%;
     }
 
-    /* Animations */
+    
     @keyframes float {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
       50% { transform: translateY(-20px) rotate(180deg); }
@@ -399,7 +399,7 @@
       }
     }
 
-    /* Responsive Design */
+    
     @media (max-width: 768px) {
       .header-content {
         padding: 0 1rem;
@@ -435,7 +435,7 @@
       }
     }
 
-    /* Loading Animation */
+    
     .page-loader {
       position: fixed;
       top: 0;
@@ -473,7 +473,7 @@
       }
     }
 
-    /* Interactive Elements */
+    
     .floating-shapes {
       position: fixed;
       top: 0;
@@ -521,7 +521,7 @@
   </style>
 </head>
 <body>
-  <!-- Loading Screen -->
+  
   <div class="page-loader">
     <div class="loader-content">
       <div class="loader-icon">🧪</div>
@@ -529,24 +529,24 @@
     </div>
   </div>
 
-  <!-- Floating Background Shapes -->
+  
   <div class="floating-shapes">
     <div class="shape">⚗️</div>
     <div class="shape">🔬</div>
     <div class="shape">💻</div>
   </div>
 
-  <!-- Header -->
+  
   <header>
     <div class="header-content">
       <h1 class="header-title">🧪 المعمل</h1>
-      <p class="header-subtitle">هنا يكون متواجد كل الادوات الازمة والفاهيم الخاصة بتجارب المعمل</p>
+      <p class="header-subtitle">هنا هيكون متواجد كل الادوات الازمة والفاهيم الخاصة بتجارب المعمل</p>
     </div>
   </header>
 
-  <!-- Main Content -->
+  
   <main>
-    <!-- Introduction Section -->
+    
     <section class="intro-section">
       <h2 class="intro-title">مرحباً بك في My Dev Lab</h2>
       <p class="intro-description">
@@ -554,9 +554,9 @@
       </p>
     </section>
 
-    <!-- Labs Grid -->
+    
     <div class="labs-grid">
-      <!-- Lab 1 -->
+      
       <a href="./LABS/lab1.html" class="lab-card">
         <div class="card-image">
           <img src="https://i.ibb.co/1YKQ5k43/Chat-GPT-Image-Sep-26-2025-10-35-16-AM.png" alt="Excel 2003 Lab">
@@ -583,7 +583,7 @@
     </div>
   </main>
 
-  <!-- Footer -->
+  
   <footer>
     <div class="footer-content">
       <p class="footer-text">
@@ -593,9 +593,9 @@
   </footer>
 
   <script>
-    // Simple JavaScript for enhanced interactivity
+    
     document.addEventListener('DOMContentLoaded', function() {
-      // Remove loading screen
+      
       setTimeout(() => {
         const loader = document.querySelector('.page-loader');
         if (loader) {
@@ -604,7 +604,7 @@
         }
       }, 2000);
 
-      // Add smooth scrolling for any anchor links
+      
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
           e.preventDefault();
@@ -618,7 +618,7 @@
         });
       });
 
-      // Add hover sound effect (optional)
+      
       const cards = document.querySelectorAll('.lab-card');
       cards.forEach(card => {
         card.addEventListener('mouseenter', function() {
@@ -629,7 +629,7 @@
         });
       });
 
-      // Add click ripple effect
+      
       cards.forEach(card => {
         card.addEventListener('click', function(e) {
           const ripple = document.createElement('div');
@@ -658,7 +658,7 @@
         });
       });
 
-      // Add CSS for ripple animation
+      
       const style = document.createElement('style');
       style.textContent = `
         @keyframes ripple {
