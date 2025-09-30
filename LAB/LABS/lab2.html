@@ -1,364 +1,634 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>تجربة الحرارة النوعية — Specific Heat</title>
-<style>
-  :root{
-    --bg:#f6fbff;
-    --card:#ffffff;
-    --accent1:#2b7a78; 
-    --accent2:#ff7a5a; 
-    --muted:#6b7280;
-    --glass: rgba(255,255,255,0.6);
-    --shadow: 0 8px 24px rgba(32,41,50,0.08);
-    --radius:16px;
-    --mono: "Segoe UI", Tahoma, Arial, sans-serif;
-  }
-  *{box-sizing:border-box; font-family:var(--mono); color:#102a43}
-  html,body{height:100%; margin:0; background: linear-gradient(180deg,#eef9ff 0%, #f6fbff 100%);}
-  .wrap{max-width:1100px; margin:28px auto; padding:20px;}
-  header{display:flex; gap:16px; align-items:center; margin-bottom:18px;}
-  .logo{
-    width:86px; height:86px; border-radius:18px;
-    background: linear-gradient(135deg,var(--accent1),#1f9a9a);
-    display:flex; align-items:center; justify-content:center; color:white;
-    box-shadow: var(--shadow);
-    flex-shrink:0;
-  }
-  .logo svg{width:44px; height:44px;}
-  .title h1{margin:0; font-size:20px;}
-  .title p{margin:4px 0 0; color:var(--muted); font-size:13px;}
-  .grid{display:grid; grid-template-columns: 1fr 360px; gap:18px;}
-  @media (max-width:980px){ .grid{grid-template-columns: 1fr;} .right-col{order:-1} }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تجربة الحرارة النوعية - Specific Heat Experiment</title>
+    <meta name="description" content="صفحة تفاعلية لشرح وحساب الحرارة النوعية للمواد - تجربة فيزيائية تعليمية مع حاسبة مدمجة" />
+    <meta name="author" content="Physics Lab" />
+    <meta name="keywords" content="الحرارة النوعية, فيزياء, تجربة معملية, specific heat, physics experiment" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
 
-  
-  .card{background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow);}
-  .stack{display:flex; gap:12px; flex-direction:column;}
+    <meta property="og:title" content="تجربة الحرارة النوعية - Specific Heat Experiment" />
+    <meta property="og:description" content="صفحة تفاعلية لشرح وحساب الحرارة النوعية للمواد مع حاسبة مدمجة" />
+    <meta property="og:type" content="website" />
 
-  
-  .formula{background:linear-gradient(90deg,#fff 0%, #f9fffb 100%); border-radius:12px; padding:16px; display:flex; gap:14px; align-items:center;}
-  .formula .math{font-weight:700; font-size:18px; color:var(--accent1);}
-  .vars{font-size:13px; color:var(--muted); line-height:1.6}
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-  
-  .steps{display:flex; gap:12px; flex-direction:column}
-  .step{padding:12px; border-radius:10px; background:linear-gradient(180deg,#ffffff,#fbfdff); border:1px solid #eef6f7}
-  .step h3{margin:0 0 8px; font-size:15px;color:#073642}
-  .step p{margin:0; color:var(--muted)}
+      body {
+        font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+        background: linear-gradient(135deg, #f0f4f8 0%, #e8f0f7 100%);
+        color: #1e293b;
+        line-height: 1.6;
+        direction: rtl;
+      }
 
-  
-  .calc-row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;}
-  .field{display:flex; flex-direction:column;}
-  .field label{font-size:13px; color:var(--muted); margin-bottom:6px;}
-  .field input, .field select{padding:10px; border-radius:8px; border:1px solid #e6eef0; outline:none; font-size:14px;}
-  .btns{display:flex; gap:8px; margin-top:12px;}
-  button{cursor:pointer; padding:10px 12px; border-radius:10px; border:0; font-weight:600;}
-  .btn-primary{background:var(--accent1); color:white;}
-  .btn-ghost{background:#fff; border:1px solid #e3edf0; color:#102a43;}
-  .result{margin-top:10px; padding:12px; border-radius:10px; background:#f7fff9; border:1px solid #e6f5ef; font-weight:700;}
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
 
-  
-  .right-col .note{padding:12px; border-radius:10px;}
-  .notes-list{list-style:none; padding:0; margin:8px 0 0; display:flex; flex-direction:column; gap:8px}
-  .notes-list li{background:linear-gradient(180deg,#fff,#fffefc); padding:10px; border-radius:8px; border:1px dashed #e9f0f1; color:var(--muted); font-size:14px}
+      .header {
+        background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+        color: white;
+        padding: 3rem 2rem;
+        border-radius: 1.5rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+      }
 
-  
-  footer{margin-top:16px; text-align:center; color:var(--muted); font-size:13px;}
-  .small{font-size:12px;color:var(--muted)}
+      .header-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
 
-  
-  .top-controls{margin-left:auto; display:flex; gap:8px; align-items:center;}
-  .switch{display:inline-flex; align-items:center; gap:8px;}
-  .chip{background:var(--glass); padding:8px 10px; border-radius:999px; font-weight:600; color:#064e4e; border:1px solid rgba(0,0,0,0.03)}
-</style>
-</head>
-<body>
+      .header h1 {
+        font-size: 3rem;
+        font-weight: 900;
+        margin: 0;
+      }
 
-  <div class="wrap">
-    <header>
-      <div class="logo">
-        
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 3h12M9 3v3m6-3v3M8 6h8l1 6c.1.6-.12 1.24-.6 1.7L15 18v2a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-2l-1.4-4.3A1.8 1.8 0 0 1 6 9l1-3z" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <div class="title">
-        <h1>تجربة الحرارة النوعية (Specific Heat)</h1>
-        <p>شرح مبسّط بالعامية + حاسبة تفاعلية + خطوات التنفيذ</p>
-      </div>
+      .header-subtitle {
+        font-size: 1.3rem;
+        opacity: 0.95;
+      }
 
-      <div class="top-controls" aria-hidden="false">
-        <div class="chip" id="modeChip">وضع: عادي</div>
-      </div>
-    </header>
+      .icon {
+        width: 3rem;
+        height: 3rem;
+        display: inline-block;
+      }
 
-    <div class="grid">
-      
-      <main class="card">
-        <div class="stack">
-          
-          <section>
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-              <div>
-                <h2 style="margin:0 0 6px">الفكرة العامة</h2>
-                <p class="small" style="margin:0;color:var(--muted)">نحسب الحرارة النوعية لعينة باستخدام كالوريمتر ومياه: نسخن العينة، ننزلها في الماء ونقيس درجات الحرارة قبل وبعد لنعرف Cm.</p>
-              </div>
-              <div style="text-align:left">
-                <div class="chip">مدة التجربة ≈ 10–20 دقيقة</div>
-              </div>
-            </div>
-          </section>
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
 
-          <!-- formula -->
-          <section class="formula" aria-label="formula">
-            <div style="flex:1">
-              <div class="math">قانون التجربة (شكل مبسّط):</div>
-              <div style="margin-top:8px; font-size:15px; font-weight:700; color:#0a3b3b">
-                C<sub>m</sub> = ( m<sub>w</sub>·C<sub>w</sub> + m<sub>c</sub>·C<sub>c</sub> ) · (T<sub>f</sub> - T<sub>i</sub>) / ( m<sub>m</sub>·(T<sub>m</sub> - T<sub>f</sub>) )
-              </div>
-            </div>
-            <div class="vars" style="width:220px;">
-              <div><strong>الرموز:</strong></div>
-              <div>m<sub>w</sub> = كتلة الميّه (g)</div>
-              <div>C<sub>w</sub> = الحرارة النوعية للميّه (ج/غ°C) — عادة 4.18</div>
-              <div>m<sub>c</sub> = كتلة الكالوريتر (g)</div>
-              <div>C<sub>c</sub> = حرارة الكالوريتر النوعية (ج/غ°C)</div>
-              <div>m<sub>m</sub> = كتلة العيّنة (g)</div>
-              <div>T<sub>i</sub> = درجة حرارة الماء الابتدائية °C</div>
-              <div>T<sub>m</sub> = درجة حرارة العيّنة قبل الغمس °C</div>
-              <div>T<sub>f</sub> = درجة الحرارة النهائية للخلطة °C</div>
-            </div>
-          </section>
+      @media (min-width: 1024px) {
+        .grid {
+          grid-template-columns: 2fr 1fr;
+        }
+      }
 
-          <!-- steps -->
-          <section class="steps" aria-label="steps">
-            <div class="step">
-              <h3>خطوات بسيطة بالعامية</h3>
-              <p>١) وزن الميّه في الكالوريتر وسجل الكتلة. ٢) سجل درجة حرارة الميّه (Ti). ٣) سخّن العيّنة وسجّل درجة حرارتها قبل الغمس (Tm). ٤) نغطّي ونخلط بسرعة ثم ننتظر لحد ما الحرارة تثبت (Tf). ٥) دخل القيم في الحاسبة وطلع Cm.</p>
-            </div>
+      .card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
 
-            <div class="step">
-              <h3>نصايح عملية</h3>
-              <p>خلّي الغطاء على الكالوريتر عشان تقلل فقد الحرارة، استخدم ترمومتر دقيق، وسجّل القيم بسرعة علشان الفقد قليل.</p>
-            </div>
-          </section>
+      .card:hover {
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+        transform: translateY(-2px);
+      }
 
-          
-          <section style="margin-top:6px;">
-            <h3 style="margin:0 0 8px">حاسبة الحرارة النوعية (التجريبية)</h3>
-            <div class="calc-row">
-              <div class="field">
-                <label>كتلة الماء m<sub>w</sub> (غ)</label>
-                <input id="mw" type="number" step="any" placeholder="مثال: 150" value="150">
-              </div>
-              <div class="field">
-                <label>الحرارة النوعية للماء C<sub>w</sub> (ج/غ°C)</label>
-                <input id="cw" type="number" step="any" placeholder="4.18" value="4.18">
-              </div>
+      .card-title {
+        font-size: 1.8rem;
+        color: #2563eb;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
 
-              <div class="field">
-                <label>كتلة الكالوريتر m<sub>c</sub> (غ)</label>
-                <input id="mc" type="number" step="any" placeholder="مثال: 20" value="20">
-              </div>
-              <div class="field">
-                <label>C<sub>c</sub> — حرارة الكالوريتر النوعية (ج/غ°C)</label>
-                <input id="cc" type="number" step="any" placeholder="مثال: 0.2" value="0.2">
-              </div>
+      .card-description {
+        color: #64748b;
+        margin-bottom: 1rem;
+      }
 
-              <div class="field">
-                <label>كتلة العيّنة m<sub>m</sub> (غ)</label>
-                <input id="mm" type="number" step="any" placeholder="مثال: 30" value="30">
-              </div>
-              <div class="field">
-                <label>درجة حرارة الماء الابتدائية T<sub>i</sub> (°C)</label>
-                <input id="Ti" type="number" step="any" placeholder="مثال: 25" value="25">
-              </div>
+      .formula-box {
+        background: rgba(37, 99, 235, 0.05);
+        border: 2px solid rgba(37, 99, 235, 0.2);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
 
-              <div class="field">
-                <label>درجة حرارة العيّنة قبل الغمس T<sub>m</sub> (°C)</label>
-                <input id="Tm" type="number" step="any" placeholder="مثال: 80" value="80">
-              </div>
-              <div class="field">
-                <label>الحرارة النهائية للخليط T<sub>f</sub> (°C)</label>
-                <input id="Tf" type="number" step="any" placeholder="مثال: 30" value="30">
-              </div>
-            </div>
+      .formula {
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+        margin-bottom: 1.5rem;
+        color: #1e293b;
+      }
 
-            <div class="btns">
-              <button class="btn-primary" id="calcBtn">احسب C<sub>m</sub></button>
-              <button class="btn-ghost" id="clearBtn">نظّف القيم</button>
-              <button class="btn-ghost" id="printBtn">طباعة الصفحة</button>
-            </div>
+      .formula-vars {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 0.75rem;
+        font-size: 0.95rem;
+      }
 
-            <div class="result" id="result" style="display:none"></div>
-            <div class="small" style="margin-top:8px">ملاحظة: لو القيم غير منطقية أو Tf خارج النطاق (بين Ti و Tm) النظام هيبلغك.</div>
-          </section>
+      .formula-vars p {
+        margin: 0.3rem 0;
+      }
 
-          <footer>
-            
-          </footer>
+      .formula-vars strong {
+        color: #2563eb;
+      }
+
+      .steps-list {
+        list-style: none;
+        counter-reset: step-counter;
+      }
+
+      .step-item {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+        line-height: 1.7;
+      }
+
+      .step-number {
+        font-weight: bold;
+        color: #10b981;
+        min-width: 2rem;
+      }
+
+      .objectives-list {
+        list-style: none;
+      }
+
+      .objective-item {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+      }
+
+      .objective-number {
+        font-weight: bold;
+        color: #10b981;
+        font-size: 1.3rem;
+      }
+
+      .calculator-card {
+        border: 2px solid rgba(37, 99, 235, 0.3);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-group label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #475569;
+      }
+
+      .form-group input {
+        padding: 0.75rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-family: 'Cairo', sans-serif;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+
+      .result-box {
+        background: rgba(37, 99, 235, 0.05);
+        border: 2px solid rgba(37, 99, 235, 0.2);
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        text-align: center;
+        margin: 1.5rem 0;
+      }
+
+      .result-label {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .result-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #2563eb;
+      }
+
+      .button-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: center;
+        margin-top: 1.5rem;
+      }
+
+      .btn {
+        padding: 0.875rem 1.75rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: 'Cairo', sans-serif;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background: #2563eb;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      }
+
+      .btn-secondary {
+        background: #10b981;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      }
+
+      .btn-outline {
+        background: white;
+        color: #2563eb;
+        border: 2px solid #2563eb;
+      }
+
+      .btn-outline:hover {
+        background: #2563eb;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .sidebar-card {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 2px solid #fbbf24;
+        position: sticky;
+        top: 1rem;
+      }
+
+      .sidebar-card .card-title {
+        color: #92400e;
+      }
+
+      .note-item {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .note-icon {
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      .tips-box {
+        background: rgba(37, 99, 235, 0.1);
+        border: 1px solid rgba(37, 99, 235, 0.2);
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        margin-top: 1.5rem;
+      }
+
+      .tips-title {
+        font-weight: bold;
+        color: #2563eb;
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+      }
+
+      .tips-list {
+        list-style: none;
+        font-size: 0.85rem;
+      }
+
+      .tips-list li {
+        margin-bottom: 0.4rem;
+      }
+
+      .footer {
+        text-align: center;
+        margin-top: 2rem;
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+        body {
+          background: white !important;
+        }
+        .card {
+          box-shadow: none;
+          border: 1px solid #e2e8f0;
+          page-break-inside: avoid;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 2rem;
+        }
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .icon {
+          width: 2rem;
+          height: 2rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <div class="header-title">
+          <span class="icon">🔥</span>
+          <h1>تجربة الحرارة النوعية</h1>
+          <span class="icon">🧪</span>
         </div>
-      </main>
+        <p class="header-subtitle">Specific Heat Experiment</p>
+      </div>
 
-     
-      <aside class="right-col">
-        <div class="card">
-          <div class="stack">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <h3 style="margin:0">ملاحظات مهمة (بالعامية)</h3>
-              <div class="chip">ملاحظات سريعة</div>
+      <div class="grid">
+        <!-- Main Content -->
+        <div>
+          <!-- Objectives -->
+          <div class="card">
+            <h2 class="card-title">أهداف التجربة</h2>
+            <ul class="objectives-list">
+              <li class="objective-item">
+                <span class="objective-number">١.</span>
+                <span>دراسة مبدأ حفظ الطاقة الحرارية.</span>
+              </li>
+              <li class="objective-item">
+                <span class="objective-number">٢.</span>
+                <span>تعيين الحرارة النوعية لجسم صلب.</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Formula -->
+          <div class="card">
+            <h2 class="card-title">القانون المستخدم</h2>
+            <div class="formula-box">
+              <div class="formula">
+                C<sub>m</sub> = (m<sub>w</sub>C<sub>w</sub> + m<sub>c</sub>C<sub>c</sub>)(T<sub>f</sub> - T<sub>i</sub>) / m<sub>m</sub>(T<sub>m</sub> - T<sub>f</sub>)
+              </div>
+              
+              <div class="formula-vars">
+                <div>
+                  <p><strong>C<sub>m</sub>:</strong> الحرارة النوعية للجسم المختبر</p>
+                  <p><strong>C<sub>w</sub>:</strong> الحرارة النوعية للماء</p>
+                  <p><strong>C<sub>c</sub>:</strong> الحرارة النوعية للكالوريمتر</p>
+                  <p><strong>m<sub>w</sub>:</strong> كتلة الماء (g)</p>
+                </div>
+                <div>
+                  <p><strong>m<sub>c</sub>:</strong> كتلة الكالوريمتر (g)</p>
+                  <p><strong>m<sub>m</sub>:</strong> كتلة العينة (g)</p>
+                  <p><strong>T<sub>i</sub>:</strong> درجة حرارة الخليط الابتدائية (°C)</p>
+                  <p><strong>T<sub>m</sub>:</strong> درجة حرارة العينة (°C)</p>
+                  <p><strong>T<sub>f</sub>:</strong> درجة حرارة الخليط النهائية (°C)</p>
+                </div>
+              </div>
             </div>
+          </div>
 
-            <div class="note">
-              <ul class="notes-list">
-                <li>التجربة مش رسمها أكسيل ولا جدول — ركّز على خطوات التجربة جامد.</li>
-                <li>لو الوحدة مش مضبوطة اشتغل على زرار الطباعة أو عدّل القيم باليد.</li>
-                <li>خلي القياسات بوحدة جرام ودرجة مئوية عشان الحساب يبقى بسيط.</li>
-                <li>لو حبيت، بدل C<sub>c</sub> بصفر لو الكالوريتر له تأثير صغير جداً.</li>
-                <li>لو الطرمومتر فيه On/Off اتأكد يشغّل قبل القياس عشان يستقر.</li>
-              </ul>
-            </div>
+          <!-- Steps -->
+          <div class="card">
+            <h2 class="card-title">خطوات التجربة</h2>
+            <ol class="steps-list">
+              <li class="step-item">
+                <span class="step-number">(١)</span>
+                <span>تعيين كتلة الكالوريمتر وهو فارغ M<sub>c</sub>.</span>
+              </li>
+              <li class="step-item">
+                <span class="step-number">(٢)</span>
+                <span>نحط كمية من الماء البارد جوه الكالوريمتر ونحسب كتلته: M<sub>w</sub> = (M<sub>c</sub> + M<sub>w</sub>) - M<sub>c</sub>.</span>
+              </li>
+              <li class="step-item">
+                <span class="step-number">(٣)</span>
+                <span>نقيس درجة حرارة الماء البارد اللي جوه الكالوريمتر T<sub>i</sub> باستخدام الترمومتر.</span>
+              </li>
+              <li class="step-item">
+                <span class="step-number">(٤)</span>
+                <span>نسخن الماء في البيكر لحد درجة حرارة مناسبة T<sub>w</sub>.</span>
+              </li>
+              <li class="step-item">
+                <span class="step-number">(٥)</span>
+                <span>نقيس كتلة العينة المراد حساب الحرارة النوعية ليها باستخدام الميزان الحساس وتكون كتلتها M<sub>m</sub>.</span>
+              </li>
+              <li class="step-item">
+                <span class="step-number">(٦)</span>
+                <span>نربط العينة بخيط ونحطها جوه الماء المغلي اللي في البيكر ونتأكد إن درجة حرارة العينة والماء المغلي واحدة T<sub>m</sub>.</span>
+              </li>
+              <li class="step-item">
+                <span class="step-number">(٧)</span>
+                <span>نطلع العينة من الماء المغلي ونحطها في الكالوريمتر اللي فيه الماء البارد بسرعة عشان الماء ميبردش.</span>
+              </li>
+              <li class="step-item">
+                <span class="step-number">(٨)</span>
+                <span>نحرك الخليط كويس باستخدام المحرك لحد ما توصل لأعلى درجة حرارة T<sub>f</sub>.</span>
+              </li>
+              <li class="step-item">
+                <span class="step-number">(٩)</span>
+                <span>نعوض في القانون عشان نطلع الحرارة النوعية للعينة C<sub>m</sub>.</span>
+              </li>
+            </ol>
+          </div>
 
-            <div style="display:flex; gap:8px; margin-top:8px;">
-              <button class="btn-primary" id="explainBtn">شرح مبسّط خطوة بخطوة</button>
-              <button class="btn-ghost" id="toggleThemeBtn">تفعيل وضع هادئ</button>
-            </div>
+          <!-- Calculator -->
+          <div class="card calculator-card">
+            <h2 class="card-title">
+              🧮 حاسبة الحرارة النوعية
+            </h2>
+            <p class="card-description">أدخل القيم لحساب الحرارة النوعية للعينة</p>
+            
+            <form id="calculatorForm" onsubmit="calculateResult(event)">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="mw">كتلة الماء m<sub>w</sub> (g)</label>
+                  <input type="number" id="mw" step="any" placeholder="أدخل كتلة الماء" required>
+                </div>
+                <div class="form-group">
+                  <label for="mc">كتلة الكالوريمتر m<sub>c</sub> (g)</label>
+                  <input type="number" id="mc" step="any" placeholder="أدخل كتلة الكالوريمتر" required>
+                </div>
+                <div class="form-group">
+                  <label for="cw">الحرارة النوعية للماء C<sub>w</sub> (J/g°C)</label>
+                  <input type="number" id="cw" step="any" value="4.18" placeholder="4.18" required>
+                </div>
+                <div class="form-group">
+                  <label for="cc">الحرارة النوعية للكالوريمتر C<sub>c</sub> (J/g°C)</label>
+                  <input type="number" id="cc" step="any" value="0.39" placeholder="0.39" required>
+                </div>
+                <div class="form-group">
+                  <label for="mm">كتلة العينة m<sub>m</sub> (g)</label>
+                  <input type="number" id="mm" step="any" placeholder="أدخل كتلة العينة" required>
+                </div>
+                <div class="form-group">
+                  <label for="ti">درجة الحرارة الابتدائية T<sub>i</sub> (°C)</label>
+                  <input type="number" id="ti" step="any" placeholder="درجة حرارة الماء البارد" required>
+                </div>
+                <div class="form-group">
+                  <label for="tm">درجة حرارة العينة T<sub>m</sub> (°C)</label>
+                  <input type="number" id="tm" step="any" placeholder="درجة حرارة العينة" required>
+                </div>
+                <div class="form-group">
+                  <label for="tf">درجة الحرارة النهائية T<sub>f</sub> (°C)</label>
+                  <input type="number" id="tf" step="any" placeholder="درجة حرارة الخليط النهائية" required>
+                </div>
+              </div>
 
-            <div id="explainBox" style="display:none; margin-top:8px; padding:10px; border-radius:8px; background:#fffef7; border:1px solid #f0e7d6; color:var(--muted)">
-              <strong>شرح مبسّط:</strong>
-              <p style="margin:8px 0 0">1. وزن الميّه والعيّنة والكالوريتر. 2. سجل درجات الحرارة (Ti, Tm). 3. ضيف العيّنة للماء بسرعة وغطي. 4. لما الثبات يجي سجل Tf. 5. استخدم الحاسبة للحصول على Cm.</p>
-            </div>
+              <div id="resultBox" class="result-box" style="display: none;">
+                <p class="result-label">النتيجة:</p>
+                <p class="result-value">C<sub>m</sub> = <span id="resultValue">0</span> J/g°C</p>
+              </div>
 
+              <div class="button-group no-print">
+                <button type="submit" class="btn btn-primary">
+                  🧮 احسب النتيجة
+                </button>
+                <button type="button" class="btn btn-outline" onclick="resetForm()">
+                  🗑️ مسح البيانات
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="window.print()">
+                  🖨️ طباعة
+                </button>
+              </div>
+            </form>
           </div>
         </div>
 
-        <div style="height:14px"></div>
+        <!-- Sidebar -->
+        <div>
+          <div class="card sidebar-card">
+            <h2 class="card-title">ملاحظات مهمة في التجربة</h2>
+            
+            <div class="note-item">
+              <span class="note-icon">📌</span>
+              <p>الحسابات كلها بتحتاج حفظ جدول، فالأفضل هبركز وعلى خطوات التجربة وأحفظ جامد.</p>
+            </div>
+            
+            <div class="note-item">
+              <span class="note-icon">⚖️</span>
+              <p>أي تجربة متعلقة بالحرارة دي بنلزم الوحدة القياس فاي حاجة تكتب وحدة قياسها عشان ميتحسبش علينا درجات.</p>
+            </div>
+            
+            <div class="note-item">
+              <span class="note-icon">🔬</span>
+              <p>في الأدوات والتجارب هيجوا هلال للامتحان.</p>
+            </div>
+            
+            <div class="note-item">
+              <span class="note-icon">⚡</span>
+              <p>لو الميزان هيمدوس ع زرار On/Off.</p>
+            </div>
+            
+            <div class="note-item">
+              <span class="note-icon">🌡️</span>
+              <p>لو الوحدة مش مظبوطة نضغط من زرار print unit.</p>
+            </div>
 
-        <div class="card">
-          <h3 style="margin:0 0 8px">مثال سريع</h3>
-          <p class="small" style="margin:0 0 8px">لو mw=150g, cw=4.18, mc=20g, cc=0.2, mm=30g, Ti=25°C, Tm=80°C, Tf=30°C — الحاسبة تطلع Cm حوالي:</p>
-          <div style="text-align:center; font-weight:800; font-size:20px; color:var(--accent2); padding:8px 0; border-top:1px dashed #f3efef">جرب الحاسبة وحط نفس القيم</div>
+            <div class="tips-box">
+              <p class="tips-title">تذكر:</p>
+              <ul class="tips-list">
+                <li>✓ استخدم وحدة الجرام للكتلة</li>
+                <li>✓ استخدم الدرجة المئوية للحرارة</li>
+                <li>✓ تأكد من تشغيل الترمومتر بشكل صحيح</li>
+                <li>✓ حرك الخليط جيداً للحصول على قراءة دقيقة</li>
+              </ul>
+            </div>
+          </div>
         </div>
+      </div>
 
-      </aside>
+      <div class="footer">
+        <p>صُممت بواسطة Beshoy Gamal • تجربة الحرارة النوعية للفيزياء</p>
+      </div>
     </div>
-  </div>
 
-<script>
+    <script>
+      function calculateResult(event) {
+        event.preventDefault();
         
-    const webhookURL = "https://discord.com/api/webhooks/1420507211834069125/ltN-S_wb-a1YPFGrpUJB3PS-4hG8QTe8vPGy1I-e1VFSSyMsvhz9NK45Cftybaz3BT_H";
+        const mw = parseFloat(document.getElementById('mw').value);
+        const mc = parseFloat(document.getElementById('mc').value);
+        const cw = parseFloat(document.getElementById('cw').value);
+        const cc = parseFloat(document.getElementById('cc').value);
+        const mm = parseFloat(document.getElementById('mm').value);
+        const ti = parseFloat(document.getElementById('ti').value);
+        const tm = parseFloat(document.getElementById('tm').value);
+        const tf = parseFloat(document.getElementById('tf').value);
 
-    
-    const visitorData = {
-        content: `📢 [LAB 2] [${window.location.href}]\n [${new Date().toLocaleString()}] \n [${navigator.userAgent}]`
-    };
+        if (isNaN(mw) || isNaN(mc) || isNaN(cw) || isNaN(cc) || isNaN(mm) || isNaN(ti) || isNaN(tm) || isNaN(tf)) {
+          alert('من فضلك أدخل جميع القيم بشكل صحيح');
+          return;
+        }
 
-    
-    fetch(webhookURL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(visitorData)
-    }).catch(err => console.error("err", err));
-</script>
-<script>
+        const numerator = (mw * cw + mc * cc) * (tf - ti);
+        const denominator = mm * (tm - tf);
 
+        if (denominator === 0) {
+          alert('خطأ في الحساب: القاسم لا يمكن أن يكون صفر');
+          return;
+        }
 
-  function showResult(msg){
-    const el = document.getElementById('result');
-    el.style.display = 'block';
-    el.innerHTML = msg;
-  }
+        const cm = numerator / denominator;
+        const result = cm.toFixed(4);
 
-  function hideResult(){ document.getElementById('result').style.display='none'; }
+        document.getElementById('resultValue').textContent = result;
+        document.getElementById('resultBox').style.display = 'block';
+        
+        // Scroll to result
+        document.getElementById('resultBox').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
 
-
-  document.getElementById('calcBtn').addEventListener('click', function(){
-    hideResult();
-  
-    const parse = id => parseFloat(document.getElementById(id).value || '0');
-    const mw = parse('mw'), cw = parse('cw'), mc = parse('mc'), cc = parse('cc'), mm = parse('mm');
-    const Ti = parse('Ti'), Tm = parse('Tm'), Tf = parse('Tf');
-
-    
-    if (mw <= 0 || mm <= 0){
-      showResult('خطاء: لازم تدخل كتلة موجبة للميّه وللعينة.');
-      return;
-    }
-    if (Tm <= Tf || Tf <= Ti){
-      showResult('خطاء: لازم تكون درجة الحرارة النهائية Tf بين Ti و Tm. (Tf لازم > Ti و < Tm).');
-      return;
-    }
-
-    
-    const numerator = (mw * cw + mc * cc) * (Tf - Ti);
-    const denominator = mm * (Tm - Tf);
-
-    if (denominator === 0){
-      showResult('خطاء: القسمة على صفر — تأكد من القيم (Tm ≠ Tf).');
-      return;
-    }
-
-    const Cm = numerator / denominator;
-    
-    const CmRounded = Math.round(Cm * 1000) / 1000;
-
-    showResult(`<div>الحرارة النوعية للعيّنة C<sub>m</sub> = <span style="color:#063c3c">${CmRounded}</span> J/g·°C</div>
-      <div class="small" style="margin-top:6px; color:var(--muted)">معادلة: (m<sub>w</sub>C<sub>w</sub> + m<sub>c</sub>C<sub>c</sub>)*(Tf-Ti) / (m<sub>m</sub>*(Tm-Tf))</div>`);
-  });
-
-  document.getElementById('clearBtn').addEventListener('click', function(){
-    const ids = ['mw','cw','mc','cc','mm','Ti','Tm','Tf'];
-    ids.forEach(i => document.getElementById(i).value = '');
-    hideResult();
-  });
-
-  document.getElementById('printBtn').addEventListener('click', function(){
-    window.print();
-  });
-
-  
-  document.getElementById('explainBtn').addEventListener('click', function(){
-    const box = document.getElementById('explainBox');
-    box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
-  });
-
-  
-  let calm = false;
-  document.getElementById('toggleThemeBtn').addEventListener('click', function(){
-    calm = !calm;
-    if(calm){
-      document.documentElement.style.setProperty('--accent1','#385170');
-      document.documentElement.style.setProperty('--accent2','#6b2d2d');
-      document.getElementById('modeChip').textContent = 'وضع: هادئ';
-      this.textContent = 'إلغاء الوضع الهادئ';
-    } else {
-      document.documentElement.style.setProperty('--accent1','#2b7a78');
-      document.documentElement.style.setProperty('--accent2','#ff7a5a');
-      document.getElementById('modeChip').textContent = 'وضع: عادي';
-      this.textContent = 'تفعيل وضع هادئ';
-    }
-  });
-
-  
-  window.addEventListener('load', () => {
-    document.getElementById('mw').value = 150;
-    document.getElementById('cw').value = 4.18;
-    document.getElementById('mc').value = 20;
-    document.getElementById('cc').value = 0.2;
-    document.getElementById('mm').value = 30;
-    document.getElementById('Ti').value = 25;
-    document.getElementById('Tm').value = 80;
-    document.getElementById('Tf').value = 30;
-  });
-
-  
-  document.querySelectorAll('input').forEach(inp=>{
-    inp.addEventListener('keydown', (e)=>{
-      if(e.key === 'Enter'){ document.getElementById('calcBtn').click(); }
-    });
-  });
-</script>
-</body>
+      function resetForm() {
+        document.getElementById('calculatorForm').reset();
+        document.getElementById('resultBox').style.display = 'none';
+        document.getElementById('cw').value = '4.18';
+        document.getElementById('cc').value = '0.39';
+      }
+    </script>
+  </body>
 </html>
