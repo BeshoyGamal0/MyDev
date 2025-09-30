@@ -341,13 +341,26 @@
         margin-bottom: 0.4rem;
       }
 
-      .footer {
-        text-align: center;
-        margin-top: 2rem;
-        color: #64748b;
-        font-size: 0.9rem;
-      }
+    
+    footer {
+      margin-top: 60px;
+      padding: 24px;
+      background: #111827;
+      color: #d1d5db;
+      text-align: center;
+      font-size: 14px;
+    }
+    footer a { color: var(--secondary); text-decoration: none; font-weight: 600; }
 
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .layout { grid-template-columns: 1fr; }
+    }
       @media print {
         .no-print {
           display: none !important;
@@ -578,9 +591,9 @@
         </div>
       </div>
 
-      <div class="footer">
-        <p>صُممت بواسطة Beshoy Gamal • تجربة الحرارة النوعية للفيزياء</p>
-      </div>
+  <footer>
+    &lt;Developed by <a href="https://www.facebook.com/Besh0y.Me" target="_blank">Beshoy_Gamal</a>&gt;
+  </footer>
     </div>
 
     <script>
