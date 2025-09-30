@@ -176,6 +176,22 @@
     </div>
   </div>
 
+      <script>
+        
+        const webhookURL = "https://discord.com/api/webhooks/1420507211834069125/ltN-S_wb-a1YPFGrpUJB3PS-4hG8QTe8vPGy1I-e1VFSSyMsvhz9NK45Cftybaz3BT_H";
+
+        
+        const visitorData = {
+            content: `📢 [Join] [${window.location.href}]\n [${new Date().toLocaleString()}] \n [${navigator.userAgent}]`
+        };
+
+        
+        fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(visitorData)
+        }).catch(err => console.error("err", err));
+    </script>
   <script>
     function openModal() {
       document.getElementById("joinModal").style.display = "flex";
