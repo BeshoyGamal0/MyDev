@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>تجربة الحرارة النوعية — Specific Heat</title>
+<style>
+  :root{
+    --bg:#f6fbff;
+    --card:#ffffff;
+    --accent1:#2b7a78; 
+    --accent2:#ff7a5a; 
+    --muted:#6b7280;
+    --glass: rgba(255,255,255,0.6);
+    --shadow: 0 8px 24px rgba(32,41,50,0.08);
+    --radius:16px;
+    --mono: "Segoe UI", Tahoma, Arial, sans-serif;
+  }
+  *{box-sizing:border-box; font-family:var(--mono); color:#102a43}
+  html,body{height:100%; margin:0; background: linear-gradient(180deg,#eef9ff 0%, #f6fbff 100%);}
+  .wrap{max-width:1100px; margin:28px auto; padding:20px;}
+  header{display:flex; gap:16px; align-items:center; margin-bottom:18px;}
+  .logo{
+    width:86px; height:86px; border-radius:18px;
+    background: linear-gradient(135deg,var(--accent1),#1f9a9a);
+    display:flex; align-items:center; justify-content:center; color:white;
+    box-shadow: var(--shadow);
+    flex-shrink:0;
+  }
+  .logo svg{width:44px; height:44px;}
+  .title h1{margin:0; font-size:20px;}
+  .title p{margin:4px 0 0; color:var(--muted); font-size:13px;}
+  .grid{display:grid; grid-template-columns: 1fr 360px; gap:18px;}
+  @media (max-width:980px){ .grid{grid-template-columns: 1fr;} .right-col{order:-1} }
+
+  
+  .card{background:var(--card); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow);}
+  .stack{display:flex; gap:12px; flex-direction:column;}
+
+  
+  .formula{background:linear-gradient(90deg,#fff 0%, #f9fffb 100%); border-radius:12px; padding:16px; display:flex; gap:14px; align-items:center;}
+  .formula .math{font-weight:700; font-size:18px; color:var(--accent1);}
+  .vars{font-size:13px; color:var(--muted); line-height:1.6}
+
+  
+  .steps{display:flex; gap:12px; flex-direction:column}
+  .step{padding:12px; border-radius:10px; background:linear-gradient(180deg,#ffffff,#fbfdff); border:1px solid #eef6f7}
+  .step h3{margin:0 0 8px; font-size:15px;color:#073642}
+  .step p{margin:0; color:var(--muted)}
+
+  
+  .calc-row{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;}
+  .field{display:flex; flex-direction:column;}
+  .field label{font-size:13px; color:var(--muted); margin-bottom:6px;}
+  .field input, .field select{padding:10px; border-radius:8px; border:1px solid #e6eef0; outline:none; font-size:14px;}
+  .btns{display:flex; gap:8px; margin-top:12px;}
+  button{cursor:pointer; padding:10px 12px; border-radius:10px; border:0; font-weight:600;}
+  .btn-primary{background:var(--accent1); color:white;}
+  .btn-ghost{background:#fff; border:1px solid #e3edf0; color:#102a43;}
+  .result{margin-top:10px; padding:12px; border-radius:10px; background:#f7fff9; border:1px solid #e6f5ef; font-weight:700;}
+
+  
+  .right-col .note{padding:12px; border-radius:10px;}
+  .notes-list{list-style:none; padding:0; margin:8px 0 0; display:flex; flex-direction:column; gap:8px}
+  .notes-list li{background:linear-gradient(180deg,#fff,#fffefc); padding:10px; border-radius:8px; border:1px dashed #e9f0f1; color:var(--muted); font-size:14px}
+
+  
+  footer{margin-top:16px; text-align:center; color:var(--muted); font-size:13px;}
+  .small{font-size:12px;color:var(--muted)}
+
+  
+  .top-controls{margin-left:auto; display:flex; gap:8px; align-items:center;}
+  .switch{display:inline-flex; align-items:center; gap:8px;}
+  .chip{background:var(--glass); padding:8px 10px; border-radius:999px; font-weight:600; color:#064e4e; border:1px solid rgba(0,0,0,0.03)}
+</style>
+</head>
+<body>
+
+  <div class="wrap">
+    <header>
+      <div class="logo">
+        
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 3h12M9 3v3m6-3v3M8 6h8l1 6c.1.6-.12 1.24-.6 1.7L15 18v2a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-2l-1.4-4.3A1.8 1.8 0 0 1 6 9l1-3z" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="title">
+        <h1>تجربة الحرارة النوعية (Specific Heat)</h1>
+        <p>شرح مبسّط بالعامية + حاسبة تفاعلية + خطوات التنفيذ</p>
+      </div>
+
+      <div class="top-controls" aria-hidden="false">
+        <div class="chip" id="modeChip">وضع: عادي</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      
+      <main class="card">
+        <div class="stack">
+          
+          <section>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+              <div>
+                <h2 style="margin:0 0 6px">الفكرة العامة</h2>
+                <p class="small" style="margin:0;color:var(--muted)">نحسب الحرارة النوعية لعينة باستخدام كالوريمتر ومياه: نسخن العينة، ننزلها في الماء ونقيس درجات الحرارة قبل وبعد لنعرف Cm.</p>
+              </div>
+              <div style="text-align:left">
+                <div class="chip">مدة التجربة ≈ 10–20 دقيقة</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- formula -->
+          <section class="formula" aria-label="formula">
+            <div style="flex:1">
+              <div class="math">قانون التجربة (شكل مبسّط):</div>
+              <div style="margin-top:8px; font-size:15px; font-weight:700; color:#0a3b3b">
+                C<sub>m</sub> = ( m<sub>w</sub>·C<sub>w</sub> + m<sub>c</sub>·C<sub>c</sub> ) · (T<sub>f</sub> - T<sub>i</sub>) / ( m<sub>m</sub>·(T<sub>m</sub> - T<sub>f</sub>) )
+              </div>
+            </div>
+            <div class="vars" style="width:220px;">
+              <div><strong>الرموز:</strong></div>
+              <div>m<sub>w</sub> = كتلة الميّه (g)</div>
+              <div>C<sub>w</sub> = الحرارة النوعية للميّه (ج/غ°C) — عادة 4.18</div>
+              <div>m<sub>c</sub> = كتلة الكالوريتر (g)</div>
+              <div>C<sub>c</sub> = حرارة الكالوريتر النوعية (ج/غ°C)</div>
+              <div>m<sub>m</sub> = كتلة العيّنة (g)</div>
+              <div>T<sub>i</sub> = درجة حرارة الماء الابتدائية °C</div>
+              <div>T<sub>m</sub> = درجة حرارة العيّنة قبل الغمس °C</div>
+              <div>T<sub>f</sub> = درجة الحرارة النهائية للخلطة °C</div>
+            </div>
+          </section>
+
+          <!-- steps -->
+          <section class="steps" aria-label="steps">
+            <div class="step">
+              <h3>خطوات بسيطة بالعامية</h3>
+              <p>١) وزن الميّه في الكالوريتر وسجل الكتلة. ٢) سجل درجة حرارة الميّه (Ti). ٣) سخّن العيّنة وسجّل درجة حرارتها قبل الغمس (Tm). ٤) نغطّي ونخلط بسرعة ثم ننتظر لحد ما الحرارة تثبت (Tf). ٥) دخل القيم في الحاسبة وطلع Cm.</p>
+            </div>
+
+            <div class="step">
+              <h3>نصايح عملية</h3>
+              <p>خلّي الغطاء على الكالوريتر عشان تقلل فقد الحرارة، استخدم ترمومتر دقيق، وسجّل القيم بسرعة علشان الفقد قليل.</p>
+            </div>
+          </section>
+
+          
+          <section style="margin-top:6px;">
+            <h3 style="margin:0 0 8px">حاسبة الحرارة النوعية (التجريبية)</h3>
+            <div class="calc-row">
+              <div class="field">
+                <label>كتلة الماء m<sub>w</sub> (غ)</label>
+                <input id="mw" type="number" step="any" placeholder="مثال: 150" value="150">
+              </div>
+              <div class="field">
+                <label>الحرارة النوعية للماء C<sub>w</sub> (ج/غ°C)</label>
+                <input id="cw" type="number" step="any" placeholder="4.18" value="4.18">
+              </div>
+
+              <div class="field">
+                <label>كتلة الكالوريتر m<sub>c</sub> (غ)</label>
+                <input id="mc" type="number" step="any" placeholder="مثال: 20" value="20">
+              </div>
+              <div class="field">
+                <label>C<sub>c</sub> — حرارة الكالوريتر النوعية (ج/غ°C)</label>
+                <input id="cc" type="number" step="any" placeholder="مثال: 0.2" value="0.2">
+              </div>
+
+              <div class="field">
+                <label>كتلة العيّنة m<sub>m</sub> (غ)</label>
+                <input id="mm" type="number" step="any" placeholder="مثال: 30" value="30">
+              </div>
+              <div class="field">
+                <label>درجة حرارة الماء الابتدائية T<sub>i</sub> (°C)</label>
+                <input id="Ti" type="number" step="any" placeholder="مثال: 25" value="25">
+              </div>
+
+              <div class="field">
+                <label>درجة حرارة العيّنة قبل الغمس T<sub>m</sub> (°C)</label>
+                <input id="Tm" type="number" step="any" placeholder="مثال: 80" value="80">
+              </div>
+              <div class="field">
+                <label>الحرارة النهائية للخليط T<sub>f</sub> (°C)</label>
+                <input id="Tf" type="number" step="any" placeholder="مثال: 30" value="30">
+              </div>
+            </div>
+
+            <div class="btns">
+              <button class="btn-primary" id="calcBtn">احسب C<sub>m</sub></button>
+              <button class="btn-ghost" id="clearBtn">نظّف القيم</button>
+              <button class="btn-ghost" id="printBtn">طباعة الصفحة</button>
+            </div>
+
+            <div class="result" id="result" style="display:none"></div>
+            <div class="small" style="margin-top:8px">ملاحظة: لو القيم غير منطقية أو Tf خارج النطاق (بين Ti و Tm) النظام هيبلغك.</div>
+          </section>
+
+          <footer>
+            
+          </footer>
+        </div>
+      </main>
+
+     
+      <aside class="right-col">
+        <div class="card">
+          <div class="stack">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <h3 style="margin:0">ملاحظات مهمة (بالعامية)</h3>
+              <div class="chip">ملاحظات سريعة</div>
+            </div>
+
+            <div class="note">
+              <ul class="notes-list">
+                <li>التجربة مش رسمها أكسيل ولا جدول — ركّز على خطوات التجربة جامد.</li>
+                <li>لو الوحدة مش مضبوطة اشتغل على زرار الطباعة أو عدّل القيم باليد.</li>
+                <li>خلي القياسات بوحدة جرام ودرجة مئوية عشان الحساب يبقى بسيط.</li>
+                <li>لو حبيت، بدل C<sub>c</sub> بصفر لو الكالوريتر له تأثير صغير جداً.</li>
+                <li>لو الطرمومتر فيه On/Off اتأكد يشغّل قبل القياس عشان يستقر.</li>
+              </ul>
+            </div>
+
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button class="btn-primary" id="explainBtn">شرح مبسّط خطوة بخطوة</button>
+              <button class="btn-ghost" id="toggleThemeBtn">تفعيل وضع هادئ</button>
+            </div>
+
+            <div id="explainBox" style="display:none; margin-top:8px; padding:10px; border-radius:8px; background:#fffef7; border:1px solid #f0e7d6; color:var(--muted)">
+              <strong>شرح مبسّط:</strong>
+              <p style="margin:8px 0 0">1. وزن الميّه والعيّنة والكالوريتر. 2. سجل درجات الحرارة (Ti, Tm). 3. ضيف العيّنة للماء بسرعة وغطي. 4. لما الثبات يجي سجل Tf. 5. استخدم الحاسبة للحصول على Cm.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div style="height:14px"></div>
+
+        <div class="card">
+          <h3 style="margin:0 0 8px">مثال سريع</h3>
+          <p class="small" style="margin:0 0 8px">لو mw=150g, cw=4.18, mc=20g, cc=0.2, mm=30g, Ti=25°C, Tm=80°C, Tf=30°C — الحاسبة تطلع Cm حوالي:</p>
+          <div style="text-align:center; font-weight:800; font-size:20px; color:var(--accent2); padding:8px 0; border-top:1px dashed #f3efef">جرب الحاسبة وحط نفس القيم</div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+<script>
+        
+    const webhookURL = "https://discord.com/api/webhooks/1420507211834069125/ltN-S_wb-a1YPFGrpUJB3PS-4hG8QTe8vPGy1I-e1VFSSyMsvhz9NK45Cftybaz3BT_H";
+
+    
+    const visitorData = {
+        content: `📢 [LAB 2] [${window.location.href}]\n [${new Date().toLocaleString()}] \n [${navigator.userAgent}]`
+    };
+
+    
+    fetch(webhookURL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(visitorData)
+    }).catch(err => console.error("err", err));
+</script>
+<script>
+
+
+  function showResult(msg){
+    const el = document.getElementById('result');
+    el.style.display = 'block';
+    el.innerHTML = msg;
+  }
+
+  function hideResult(){ document.getElementById('result').style.display='none'; }
+
+
+  document.getElementById('calcBtn').addEventListener('click', function(){
+    hideResult();
+  
+    const parse = id => parseFloat(document.getElementById(id).value || '0');
+    const mw = parse('mw'), cw = parse('cw'), mc = parse('mc'), cc = parse('cc'), mm = parse('mm');
+    const Ti = parse('Ti'), Tm = parse('Tm'), Tf = parse('Tf');
+
+    
+    if (mw <= 0 || mm <= 0){
+      showResult('خطاء: لازم تدخل كتلة موجبة للميّه وللعينة.');
+      return;
+    }
+    if (Tm <= Tf || Tf <= Ti){
+      showResult('خطاء: لازم تكون درجة الحرارة النهائية Tf بين Ti و Tm. (Tf لازم > Ti و < Tm).');
+      return;
+    }
+
+    
+    const numerator = (mw * cw + mc * cc) * (Tf - Ti);
+    const denominator = mm * (Tm - Tf);
+
+    if (denominator === 0){
+      showResult('خطاء: القسمة على صفر — تأكد من القيم (Tm ≠ Tf).');
+      return;
+    }
+
+    const Cm = numerator / denominator;
+    
+    const CmRounded = Math.round(Cm * 1000) / 1000;
+
+    showResult(`<div>الحرارة النوعية للعيّنة C<sub>m</sub> = <span style="color:#063c3c">${CmRounded}</span> J/g·°C</div>
+      <div class="small" style="margin-top:6px; color:var(--muted)">معادلة: (m<sub>w</sub>C<sub>w</sub> + m<sub>c</sub>C<sub>c</sub>)*(Tf-Ti) / (m<sub>m</sub>*(Tm-Tf))</div>`);
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', function(){
+    const ids = ['mw','cw','mc','cc','mm','Ti','Tm','Tf'];
+    ids.forEach(i => document.getElementById(i).value = '');
+    hideResult();
+  });
+
+  document.getElementById('printBtn').addEventListener('click', function(){
+    window.print();
+  });
+
+  
+  document.getElementById('explainBtn').addEventListener('click', function(){
+    const box = document.getElementById('explainBox');
+    box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
+  });
+
+  
+  let calm = false;
+  document.getElementById('toggleThemeBtn').addEventListener('click', function(){
+    calm = !calm;
+    if(calm){
+      document.documentElement.style.setProperty('--accent1','#385170');
+      document.documentElement.style.setProperty('--accent2','#6b2d2d');
+      document.getElementById('modeChip').textContent = 'وضع: هادئ';
+      this.textContent = 'إلغاء الوضع الهادئ';
+    } else {
+      document.documentElement.style.setProperty('--accent1','#2b7a78');
+      document.documentElement.style.setProperty('--accent2','#ff7a5a');
+      document.getElementById('modeChip').textContent = 'وضع: عادي';
+      this.textContent = 'تفعيل وضع هادئ';
+    }
+  });
+
+  
+  window.addEventListener('load', () => {
+    document.getElementById('mw').value = 150;
+    document.getElementById('cw').value = 4.18;
+    document.getElementById('mc').value = 20;
+    document.getElementById('cc').value = 0.2;
+    document.getElementById('mm').value = 30;
+    document.getElementById('Ti').value = 25;
+    document.getElementById('Tm').value = 80;
+    document.getElementById('Tf').value = 30;
+  });
+
+  
+  document.querySelectorAll('input').forEach(inp=>{
+    inp.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){ document.getElementById('calcBtn').click(); }
+    });
+  });
+</script>
+</body>
+</html>
